@@ -21,7 +21,7 @@ void ModelApp::Prepare()
   auto document = Microsoft::glTF::Deserialize(glbResourceReader->GetJson());
 
   // マテリアル数分のSRVディスクリプタが必要になるのでここで準備.
-  PrepareDescriptorHeapForModelApp(document.materials.Elements().size());
+  PrepareDescriptorHeapForModelApp(UINT(document.materials.Elements().size()));
 
   MakeModelGeometry(document, glbResourceReader);
   MakeModelMaterial(document, glbResourceReader);
@@ -270,7 +270,7 @@ ModelApp::TextureObject ModelApp::CreateTextureFromMemory(const std::vector<char
   DirectX::CreateTexture(m_device.Get(), metadata, &texture);
 
   // ステージングバッファの準備
-  const auto totalBytes = GetRequiredIntermediateSize(texture.Get(), 0, subresources.size());
+  const auto totalBytes = GetRequiredIntermediateSize(texture.Get(), 0, UINT(subresources.size()));
   m_device->CreateCommittedResource(
     &CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
     D3D12_HEAP_FLAG_NONE,
@@ -388,8 +388,8 @@ void ModelApp::MakeModelGeometry(const Microsoft::glTF::Document& doc, std::shar
       // インデックスデータ
       indices = reader->ReadBinaryData<uint32_t>(doc, accIndex);
 
-      auto vbSize = sizeof(Vertex) * vertices.size();
-      auto ibSize = sizeof(uint32_t) * indices.size();
+      auto vbSize = UINT(sizeof(Vertex) * vertices.size());
+      auto ibSize = UINT(sizeof(uint32_t) * indices.size());
       ModelMesh modelMesh;
       auto vb = CreateBuffer(vbSize, vertices.data());
       D3D12_VERTEX_BUFFER_VIEW vbView;
@@ -407,9 +407,9 @@ void ModelApp::MakeModelGeometry(const Microsoft::glTF::Document& doc, std::shar
       modelMesh.indexBuffer.buffer = ib;
       modelMesh.indexBuffer.indexView = ibView;
 
-      modelMesh.vertexCount = vertices.size();
-      modelMesh.indexCount = indices.size();
-      modelMesh.materialIndex = doc.materials.GetIndex(meshPrimitive.materialId);
+      modelMesh.vertexCount = UINT(vertices.size());
+      modelMesh.indexCount = UINT(indices.size());
+      modelMesh.materialIndex = int(doc.materials.GetIndex(meshPrimitive.materialId));
       m_model.meshes.push_back(modelMesh);
     }
   }

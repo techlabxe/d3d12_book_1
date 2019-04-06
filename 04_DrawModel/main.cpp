@@ -70,7 +70,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow)
     }
 
     theApp.Terminate();
-    return msg.wParam;
+    return static_cast<int>(msg.wParam);
   }
   catch (std::runtime_error e)
   {

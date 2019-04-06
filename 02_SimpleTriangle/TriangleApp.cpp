@@ -1,4 +1,5 @@
 ﻿#include "TriangleApp.h"
+#include <stdexcept>
 
 void TriangleApp::Prepare()
 {

@@ -1,6 +1,7 @@
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 #include "../common/D3D12AppBase.h"
+#include <stdexcept>
 
 const int WINDOW_WIDTH = 640;
 const int WINDOW_HEIGHT = 480;
@@ -68,7 +69,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow)
     }
 
     theApp.Terminate();
-    return msg.wParam;
+    return static_cast<int>(msg.wParam);
   }
   catch (std::runtime_error e)
   {
