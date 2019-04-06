@@ -1,4 +1,4 @@
-#include "TriangleApp.h"
+ï»¿#include "TriangleApp.h"
 
 void TriangleApp::Prepare()
 {
@@ -9,12 +9,12 @@ void TriangleApp::Prepare()
   };
   uint32_t indices[] = { 0, 1, 2 };
 
-  // ’¸“_ƒoƒbƒtƒ@‚ÆƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@‚Ì¶¬.
+  // é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ã¨ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ã®ç”Ÿæˆ.
   m_vertexBuffer = CreateBuffer(sizeof(triangleVertices), triangleVertices);
   m_indexBuffer = CreateBuffer(sizeof(indices), indices);
   m_indexCount = _countof(indices);
 
-  // Šeƒoƒbƒtƒ@‚Ìƒrƒ…[‚ğ¶¬.
+  // å„ãƒãƒƒãƒ•ã‚¡ã®ãƒ“ãƒ¥ãƒ¼ã‚’ç”Ÿæˆ.
   m_vertexBufferView.BufferLocation = m_vertexBuffer->GetGPUVirtualAddress();
   m_vertexBufferView.SizeInBytes = sizeof(triangleVertices);
   m_vertexBufferView.StrideInBytes = sizeof(Vertex);
@@ -22,7 +22,7 @@ void TriangleApp::Prepare()
   m_indexBufferView.SizeInBytes = sizeof(indices);
   m_indexBufferView.Format = DXGI_FORMAT_R32_UINT;
 
-  // ƒVƒF[ƒ_[‚ğƒRƒ“ƒpƒCƒ‹.
+  // ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã‚’ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«.
   HRESULT hr;
   ComPtr<ID3DBlob> errBlob;
   hr = CompileShaderFromFile(L"VertexShader.hlsl", L"vs_6_0", m_vs, errBlob);
@@ -36,7 +36,7 @@ void TriangleApp::Prepare()
     OutputDebugStringA((const char*)errBlob->GetBufferPointer());
   }
 
-  // ƒ‹[ƒgƒVƒOƒlƒ`ƒƒ‚Ì\’z
+  // ãƒ«ãƒ¼ãƒˆã‚·ã‚°ãƒãƒãƒ£ã®æ§‹ç¯‰
   CD3DX12_ROOT_SIGNATURE_DESC rootSigDesc{};
   rootSigDesc.Init(
     0, nullptr,   //pParameters
@@ -49,7 +49,7 @@ void TriangleApp::Prepare()
   {
     throw std::runtime_error("D3D12SerializeRootSignature faild.");
   }
-  // RootSignature ‚Ì¶¬
+  // RootSignature ã®ç”Ÿæˆ
   hr = m_device->CreateRootSignature(
     0,
     signature->GetBufferPointer(), signature->GetBufferSize(),
@@ -60,34 +60,34 @@ void TriangleApp::Prepare()
     throw std::runtime_error("CrateRootSignature failed.");
   }
 
-  // ƒCƒ“ƒvƒbƒgƒŒƒCƒAƒEƒg
+  // ã‚¤ãƒ³ãƒ—ãƒƒãƒˆãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆ
   D3D12_INPUT_ELEMENT_DESC inputElementDesc[] = {
     { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, offsetof(Vertex, Pos), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA},
     { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT,0, offsetof(Vertex,Color), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA},
   };
 
-  // ƒpƒCƒvƒ‰ƒCƒ“ƒXƒe[ƒgƒIƒuƒWƒFƒNƒg‚Ì¶¬.
+  // ãƒ‘ã‚¤ãƒ—ãƒ©ã‚¤ãƒ³ã‚¹ãƒ†ãƒ¼ãƒˆã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç”Ÿæˆ.
   D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc{};
-  // ƒVƒF[ƒ_[‚ÌƒZƒbƒg
+  // ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã®ã‚»ãƒƒãƒˆ
   psoDesc.VS = CD3DX12_SHADER_BYTECODE(m_vs.Get());
   psoDesc.PS = CD3DX12_SHADER_BYTECODE(m_ps.Get());
-  // ƒuƒŒƒ“ƒhƒXƒe[ƒgİ’è
+  // ãƒ–ãƒ¬ãƒ³ãƒ‰ã‚¹ãƒ†ãƒ¼ãƒˆè¨­å®š
   psoDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
-  // ƒ‰ƒXƒ^ƒ‰ƒCƒU[ƒXƒe[ƒg
+  // ãƒ©ã‚¹ã‚¿ãƒ©ã‚¤ã‚¶ãƒ¼ã‚¹ãƒ†ãƒ¼ãƒˆ
   psoDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-  // o—Íæ‚Í1ƒ^[ƒQƒbƒg
+  // å‡ºåŠ›å…ˆã¯1ã‚¿ãƒ¼ã‚²ãƒƒãƒˆ
   psoDesc.NumRenderTargets = 1;
   psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
-  // ƒfƒvƒXƒoƒbƒtƒ@‚ÌƒtƒH[ƒ}ƒbƒg‚ğİ’è
+  // ãƒ‡ãƒ—ã‚¹ãƒãƒƒãƒ•ã‚¡ã®ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã‚’è¨­å®š
   psoDesc.DSVFormat = DXGI_FORMAT_D32_FLOAT;
   psoDesc.InputLayout = { inputElementDesc, _countof(inputElementDesc) };
   psoDesc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
-  // ƒ‹[ƒgƒVƒOƒlƒ`ƒƒ‚ÌƒZƒbƒg
+  // ãƒ«ãƒ¼ãƒˆã‚·ã‚°ãƒãƒãƒ£ã®ã‚»ãƒƒãƒˆ
   psoDesc.pRootSignature = m_rootSignature.Get();
   psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
-  // ƒ}ƒ‹ƒ`ƒTƒ“ƒvƒ‹İ’è
+  // ãƒãƒ«ãƒã‚µãƒ³ãƒ—ãƒ«è¨­å®š
   psoDesc.SampleDesc = { 1,0 };
-  psoDesc.SampleMask = UINT_MAX; // ‚±‚ê‚ğ–Y‚ê‚é‚ÆŠG‚ªo‚È‚¢•Œx‚ào‚È‚¢‚Ì‚Å’ˆÓ.
+  psoDesc.SampleMask = UINT_MAX; // ã“ã‚Œã‚’å¿˜ã‚Œã‚‹ã¨çµµãŒå‡ºãªã„ï¼†è­¦å‘Šã‚‚å‡ºãªã„ã®ã§æ³¨æ„.
 
   hr = m_device->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&m_pipeline));
   if (FAILED(hr))
@@ -109,20 +109,20 @@ void TriangleApp::Cleanup()
 
 void TriangleApp::MakeCommand(ComPtr<ID3D12GraphicsCommandList>& command)
 {
-  // ƒpƒCƒvƒ‰ƒCƒ“ƒXƒe[ƒg‚ÌƒZƒbƒg
+  // ãƒ‘ã‚¤ãƒ—ãƒ©ã‚¤ãƒ³ã‚¹ãƒ†ãƒ¼ãƒˆã®ã‚»ãƒƒãƒˆ
   command->SetPipelineState(m_pipeline.Get());
-  // ƒ‹[ƒgƒVƒOƒlƒ`ƒƒ‚ÌƒZƒbƒg
+  // ãƒ«ãƒ¼ãƒˆã‚·ã‚°ãƒãƒãƒ£ã®ã‚»ãƒƒãƒˆ
   command->SetGraphicsRootSignature(m_rootSignature.Get());
-  // ƒrƒ…[ƒ|[ƒg‚ÆƒVƒU[‚ÌƒZƒbƒg
+  // ãƒ“ãƒ¥ãƒ¼ãƒãƒ¼ãƒˆã¨ã‚·ã‚¶ãƒ¼ã®ã‚»ãƒƒãƒˆ
   command->RSSetViewports(1, &m_viewport);
   command->RSSetScissorRects(1, &m_scissorRect);
 
-  // ƒvƒŠƒ~ƒeƒBƒuƒ^ƒCƒvA’¸“_EƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@‚ÌƒZƒbƒg
+  // ãƒ—ãƒªãƒŸãƒ†ã‚£ãƒ–ã‚¿ã‚¤ãƒ—ã€é ‚ç‚¹ãƒ»ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ã®ã‚»ãƒƒãƒˆ
   command->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
   command->IASetVertexBuffers(0, 1, &m_vertexBufferView);
   command->IASetIndexBuffer(&m_indexBufferView);
 
-  // •`‰æ–½—ß‚Ì”­s
+  // æç”»å‘½ä»¤ã®ç™ºè¡Œ
   command->DrawIndexedInstanced(m_indexCount, 1, 0, 0, 0);
 }
 
@@ -139,7 +139,7 @@ TriangleApp::ComPtr<ID3D12Resource1> TriangleApp::CreateBuffer(UINT bufferSize, 
     IID_PPV_ARGS(&buffer)
   );
 
-  // ‰Šúƒf[ƒ^‚Ìw’è‚ª‚ ‚é‚Æ‚«‚É‚ÍƒRƒs[‚·‚é
+  // åˆæœŸãƒ‡ãƒ¼ã‚¿ã®æŒ‡å®šãŒã‚ã‚‹ã¨ãã«ã¯ã‚³ãƒ”ãƒ¼ã™ã‚‹
   if (SUCCEEDED(hr) && initialData != nullptr)
   {
     void* mapped;

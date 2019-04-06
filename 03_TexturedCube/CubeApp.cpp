@@ -1,4 +1,4 @@
-#include "CubeApp.h"
+ï»¿#include "CubeApp.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "../common/stb_image.h"
 
@@ -14,32 +14,32 @@ void CubeApp::Prepare()
   const DirectX::XMFLOAT4 magenta(1.0f, 0.0f, 1.0f,1.0f);
   const DirectX::XMFLOAT4 cyan(0.0f, 1.0f, 1.0f,1.0f);
   Vertex triangleVertices[] = {
-  // ³–Ê
+  // æ­£é¢
     { {-k,-k,-k}, red, { 0.0f, 1.0f} },
     { {-k, k,-k}, yellow, { 0.0f, 0.0f} },
     { { k, k,-k}, white, { 1.0f, 0.0f} },
     { { k,-k,-k}, magenta, { 1.0f, 1.0f} },
-    // ‰E
+    // å³
     { { k,-k,-k}, magenta, { 0.0f, 1.0f} },
     { { k, k,-k}, white, { 0.0f, 0.0f} },
     { { k, k, k}, cyan, { 1.0f, 0.0f} },
     { { k,-k, k}, blue, { 1.0f, 1.0f} },
-    // ¶
+    // å·¦
     { {-k,-k, k}, black, { 0.0f, 1.0f} },
     { {-k, k, k}, green, { 0.0f, 0.0f} },
     { {-k, k,-k}, yellow, { 1.0f, 0.0f} },
     { {-k,-k,-k}, red, { 1.0f, 1.0f} },
-    // — 
+    // è£
     { { k,-k, k}, blue, { 0.0f, 1.0f} },
     { { k, k, k}, cyan, { 0.0f, 0.0f} },
     { {-k, k, k}, green, { 1.0f, 0.0f} },
     { {-k,-k, k}, black, { 1.0f, 1.0f} },
-    // ã
+    // ä¸Š
     { {-k, k,-k}, yellow, { 0.0f, 1.0f} },
     { {-k, k, k}, green, { 0.0f, 0.0f} },
     { { k, k, k}, cyan, { 1.0f, 0.0f} },
     { { k, k,-k}, white, { 1.0f, 1.0f} },
-    // ’ê
+    // åº•
     { {-k,-k, k}, red, { 0.0f, 1.0f} },
     { {-k,-k,-k}, red, { 0.0f, 0.0f} },
     { { k,-k,-k}, magenta, { 1.0f, 0.0f} },
@@ -54,12 +54,12 @@ void CubeApp::Prepare()
     20,21,22, 22,23,20,
   };
 
-  // ’¸“_ƒoƒbƒtƒ@‚ÆƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@‚Ì¶¬.
+  // é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ã¨ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ã®ç”Ÿæˆ.
   m_vertexBuffer = CreateBuffer(sizeof(triangleVertices), triangleVertices);
   m_indexBuffer = CreateBuffer(sizeof(indices), indices);
   m_indexCount = _countof(indices);
 
-  // Šeƒoƒbƒtƒ@‚Ìƒrƒ…[‚ğ¶¬.
+  // å„ãƒãƒƒãƒ•ã‚¡ã®ãƒ“ãƒ¥ãƒ¼ã‚’ç”Ÿæˆ.
   m_vertexBufferView.BufferLocation = m_vertexBuffer->GetGPUVirtualAddress();
   m_vertexBufferView.SizeInBytes = sizeof(triangleVertices);
   m_vertexBufferView.StrideInBytes = sizeof(Vertex);
@@ -67,7 +67,7 @@ void CubeApp::Prepare()
   m_indexBufferView.SizeInBytes = sizeof(indices);
   m_indexBufferView.Format = DXGI_FORMAT_R32_UINT;
 
-  // ƒVƒF[ƒ_[‚ğƒRƒ“ƒpƒCƒ‹.
+  // ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã‚’ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«.
   HRESULT hr;
   ComPtr<ID3DBlob> errBlob;
   hr = CompileShaderFromFile(L"simpleTexVS.hlsl", L"vs_6_0", m_vs, errBlob);
@@ -82,16 +82,16 @@ void CubeApp::Prepare()
   }
 
   CD3DX12_DESCRIPTOR_RANGE cbv, srv, sampler;
-  cbv.Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0); // b0 ƒŒƒWƒXƒ^
-  srv.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0); // t0 ƒŒƒWƒXƒ^
-  sampler.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER, 1, 0); // s0 ƒŒƒWƒXƒ^
+  cbv.Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0); // b0 ãƒ¬ã‚¸ã‚¹ã‚¿
+  srv.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0); // t0 ãƒ¬ã‚¸ã‚¹ã‚¿
+  sampler.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER, 1, 0); // s0 ãƒ¬ã‚¸ã‚¹ã‚¿
 
   CD3DX12_ROOT_PARAMETER rootParams[3];
   rootParams[0].InitAsDescriptorTable(1, &cbv, D3D12_SHADER_VISIBILITY_VERTEX);
   rootParams[1].InitAsDescriptorTable(1, &srv, D3D12_SHADER_VISIBILITY_PIXEL);
   rootParams[2].InitAsDescriptorTable(1, &sampler, D3D12_SHADER_VISIBILITY_PIXEL);
 
-  // ƒ‹[ƒgƒVƒOƒlƒ`ƒƒ‚Ì\’z
+  // ãƒ«ãƒ¼ãƒˆã‚·ã‚°ãƒãƒãƒ£ã®æ§‹ç¯‰
   CD3DX12_ROOT_SIGNATURE_DESC rootSigDesc{};
   rootSigDesc.Init(
     _countof(rootParams), rootParams,   //pParameters
@@ -104,7 +104,7 @@ void CubeApp::Prepare()
   {
     throw std::runtime_error("D3D12SerializeRootSignature faild.");
   }
-  // RootSignature ‚Ì¶¬
+  // RootSignature ã®ç”Ÿæˆ
   hr = m_device->CreateRootSignature(
     0,
     signature->GetBufferPointer(), signature->GetBufferSize(),
@@ -115,37 +115,37 @@ void CubeApp::Prepare()
     throw std::runtime_error("CrateRootSignature failed.");
   }
 
-  // ƒCƒ“ƒvƒbƒgƒŒƒCƒAƒEƒg
+  // ã‚¤ãƒ³ãƒ—ãƒƒãƒˆãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆ
   D3D12_INPUT_ELEMENT_DESC inputElementDesc[] = {
     { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, offsetof(Vertex, Pos), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA},
     { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT,0, offsetof(Vertex,Color), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA},
     { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, offsetof(Vertex,UV), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA}
   };
 
-  // ƒpƒCƒvƒ‰ƒCƒ“ƒXƒe[ƒgƒIƒuƒWƒFƒNƒg‚Ì¶¬.
+  // ãƒ‘ã‚¤ãƒ—ãƒ©ã‚¤ãƒ³ã‚¹ãƒ†ãƒ¼ãƒˆã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç”Ÿæˆ.
   D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc{};
-  // ƒVƒF[ƒ_[‚ÌƒZƒbƒg
+  // ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã®ã‚»ãƒƒãƒˆ
   psoDesc.VS = CD3DX12_SHADER_BYTECODE(m_vs.Get());
   psoDesc.PS = CD3DX12_SHADER_BYTECODE(m_ps.Get());
-  // ƒuƒŒƒ“ƒhƒXƒe[ƒgİ’è
+  // ãƒ–ãƒ¬ãƒ³ãƒ‰ã‚¹ãƒ†ãƒ¼ãƒˆè¨­å®š
   psoDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
-  // ƒ‰ƒXƒ^ƒ‰ƒCƒU[ƒXƒe[ƒg
+  // ãƒ©ã‚¹ã‚¿ãƒ©ã‚¤ã‚¶ãƒ¼ã‚¹ãƒ†ãƒ¼ãƒˆ
   psoDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-  // o—Íæ‚Í1ƒ^[ƒQƒbƒg
+  // å‡ºåŠ›å…ˆã¯1ã‚¿ãƒ¼ã‚²ãƒƒãƒˆ
   psoDesc.NumRenderTargets = 1;
   psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
-  // ƒfƒvƒXƒoƒbƒtƒ@‚ÌƒtƒH[ƒ}ƒbƒg‚ğİ’è
+  // ãƒ‡ãƒ—ã‚¹ãƒãƒƒãƒ•ã‚¡ã®ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã‚’è¨­å®š
   psoDesc.DSVFormat = DXGI_FORMAT_D32_FLOAT;
   psoDesc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
 
   psoDesc.InputLayout = { inputElementDesc, _countof(inputElementDesc) };
 
-  // ƒ‹[ƒgƒVƒOƒlƒ`ƒƒ‚ÌƒZƒbƒg
+  // ãƒ«ãƒ¼ãƒˆã‚·ã‚°ãƒãƒãƒ£ã®ã‚»ãƒƒãƒˆ
   psoDesc.pRootSignature = m_rootSignature.Get();
   psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
-  // ƒ}ƒ‹ƒ`ƒTƒ“ƒvƒ‹İ’è
+  // ãƒãƒ«ãƒã‚µãƒ³ãƒ—ãƒ«è¨­å®š
   psoDesc.SampleDesc = { 1,0 };
-  psoDesc.SampleMask = UINT_MAX; // ‚±‚ê‚ğ–Y‚ê‚é‚ÆŠG‚ªo‚È‚¢•Œx‚ào‚È‚¢‚Ì‚Å’ˆÓ.
+  psoDesc.SampleMask = UINT_MAX; // ã“ã‚Œã‚’å¿˜ã‚Œã‚‹ã¨çµµãŒå‡ºãªã„ï¼†è­¦å‘Šã‚‚å‡ºãªã„ã®ã§æ³¨æ„.
 
   hr = m_device->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&m_pipeline));
   if (FAILED(hr))
@@ -155,7 +155,7 @@ void CubeApp::Prepare()
 
   PrepareDescriptorHeapForCubeApp();
 
-  // ’è”ƒoƒbƒtƒ@/’è”ƒoƒbƒtƒ@ƒrƒ…[‚Ì¶¬
+  // å®šæ•°ãƒãƒƒãƒ•ã‚¡/å®šæ•°ãƒãƒƒãƒ•ã‚¡ãƒ“ãƒ¥ãƒ¼ã®ç”Ÿæˆ
   m_constantBuffers.resize(FrameBufferCount);
   m_cbViews.resize(FrameBufferCount);
   for (UINT i = 0; i < FrameBufferCount; ++i)
@@ -172,10 +172,10 @@ void CubeApp::Prepare()
     m_cbViews[i] = CD3DX12_GPU_DESCRIPTOR_HANDLE(m_heapSrvCbv->GetGPUDescriptorHandleForHeapStart(), ConstantBufferDescriptorBase + i, m_srvcbvDescriptorSize);
   }
 
-  // ƒeƒNƒXƒ`ƒƒ‚Ì¶¬
+  // ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®ç”Ÿæˆ
   m_texture = CreateTexture("texture.tga");
 
-  // ƒTƒ“ƒvƒ‰[‚Ì¶¬
+  // ã‚µãƒ³ãƒ—ãƒ©ãƒ¼ã®ç”Ÿæˆ
   D3D12_SAMPLER_DESC samplerDesc{};
   samplerDesc.Filter = D3D12_ENCODE_BASIC_FILTER(
     D3D12_FILTER_TYPE_LINEAR, // min
@@ -189,12 +189,12 @@ void CubeApp::Prepare()
   samplerDesc.MinLOD = -FLT_MAX;
   samplerDesc.ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
 
-  // ƒTƒ“ƒvƒ‰[—pƒfƒBƒXƒNƒŠƒvƒ^ƒq[ƒv‚Ì0”Ô–Ú‚ğg—p‚·‚é
+  // ã‚µãƒ³ãƒ—ãƒ©ãƒ¼ç”¨ãƒ‡ã‚£ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ’ãƒ¼ãƒ—ã®0ç•ªç›®ã‚’ä½¿ç”¨ã™ã‚‹
   auto descriptorSampler = CD3DX12_CPU_DESCRIPTOR_HANDLE(m_heapSampler->GetCPUDescriptorHandleForHeapStart(), SamplerDescriptorBase, m_samplerDescriptorSize);
   m_device->CreateSampler(&samplerDesc, descriptorSampler);
   m_sampler = CD3DX12_GPU_DESCRIPTOR_HANDLE(m_heapSampler->GetGPUDescriptorHandleForHeapStart(), SamplerDescriptorBase, m_samplerDescriptorSize);
 
-  // ƒeƒNƒXƒ`ƒƒ‚©‚çƒVƒF[ƒ_[ƒŠƒ\[ƒXƒrƒ…[‚Ì€”õ.
+  // ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‹ã‚‰ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ãƒªã‚½ãƒ¼ã‚¹ãƒ“ãƒ¥ãƒ¼ã®æº–å‚™.
   auto srvHandle = CD3DX12_CPU_DESCRIPTOR_HANDLE(m_heapSrvCbv->GetCPUDescriptorHandleForHeapStart(), TextureSrvDescriptorBase, m_srvcbvDescriptorSize);
   D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
   srvDesc.Texture2D.MipLevels = 1;
@@ -219,7 +219,7 @@ void CubeApp::MakeCommand(ComPtr<ID3D12GraphicsCommandList>& command)
 {
   using namespace DirectX;
 
-  // Šes—ñ‚ÌƒZƒbƒg.
+  // å„è¡Œåˆ—ã®ã‚»ãƒƒãƒˆ.
   ShaderParameters shaderParams;
   XMStoreFloat4x4(&shaderParams.mtxWorld, XMMatrixRotationAxis(XMVectorSet(0.0f,1.0f,0.0f,0.0f), XMConvertToRadians(45.0f)));
   auto mtxView = XMMatrixLookAtLH(
@@ -231,7 +231,7 @@ void CubeApp::MakeCommand(ComPtr<ID3D12GraphicsCommandList>& command)
   XMStoreFloat4x4(&shaderParams.mtxView, XMMatrixTranspose(mtxView));
   XMStoreFloat4x4(&shaderParams.mtxProj, XMMatrixTranspose(mtxProj));
 
-  // ’è”ƒoƒbƒtƒ@‚ÌXV.
+  // å®šæ•°ãƒãƒƒãƒ•ã‚¡ã®æ›´æ–°.
   auto& constantBuffer = m_constantBuffers[m_frameIndex];
   {
     void* p;
@@ -241,21 +241,21 @@ void CubeApp::MakeCommand(ComPtr<ID3D12GraphicsCommandList>& command)
     constantBuffer->Unmap(0, nullptr);
   }
 
-  // ƒpƒCƒvƒ‰ƒCƒ“ƒXƒe[ƒg‚ÌƒZƒbƒg
+  // ãƒ‘ã‚¤ãƒ—ãƒ©ã‚¤ãƒ³ã‚¹ãƒ†ãƒ¼ãƒˆã®ã‚»ãƒƒãƒˆ
   command->SetPipelineState(m_pipeline.Get());
-  // ƒ‹[ƒgƒVƒOƒlƒ`ƒƒ‚ÌƒZƒbƒg
+  // ãƒ«ãƒ¼ãƒˆã‚·ã‚°ãƒãƒãƒ£ã®ã‚»ãƒƒãƒˆ
   command->SetGraphicsRootSignature(m_rootSignature.Get());
-  // ƒrƒ…[ƒ|[ƒg‚ÆƒVƒU[‚ÌƒZƒbƒg
+  // ãƒ“ãƒ¥ãƒ¼ãƒãƒ¼ãƒˆã¨ã‚·ã‚¶ãƒ¼ã®ã‚»ãƒƒãƒˆ
   command->RSSetViewports(1, &m_viewport);
   command->RSSetScissorRects(1, &m_scissorRect);
 
-  // ƒfƒBƒXƒNƒŠƒvƒ^ƒq[ƒv‚ğƒZƒbƒg.
+  // ãƒ‡ã‚£ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ’ãƒ¼ãƒ—ã‚’ã‚»ãƒƒãƒˆ.
   ID3D12DescriptorHeap* heaps[] = {
     m_heapSrvCbv.Get(), m_heapSampler.Get()
   };
   command->SetDescriptorHeaps(_countof(heaps), heaps);
 
-  // ƒvƒŠƒ~ƒeƒBƒuƒ^ƒCƒvA’¸“_EƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@‚ÌƒZƒbƒg
+  // ãƒ—ãƒªãƒŸãƒ†ã‚£ãƒ–ã‚¿ã‚¤ãƒ—ã€é ‚ç‚¹ãƒ»ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ã®ã‚»ãƒƒãƒˆ
   command->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
   command->IASetVertexBuffers(0, 1, &m_vertexBufferView);
   command->IASetIndexBuffer(&m_indexBufferView);
@@ -264,7 +264,7 @@ void CubeApp::MakeCommand(ComPtr<ID3D12GraphicsCommandList>& command)
   command->SetGraphicsRootDescriptorTable(1, m_srv);
   command->SetGraphicsRootDescriptorTable(2, m_sampler);
 
-  // •`‰æ–½—ß‚Ì”­s
+  // æç”»å‘½ä»¤ã®ç™ºè¡Œ
   command->DrawIndexedInstanced(m_indexCount, 1, 0, 0, 0);
 }
 
@@ -281,7 +281,7 @@ CubeApp::ComPtr<ID3D12Resource1> CubeApp::CreateBuffer(UINT bufferSize, const vo
     IID_PPV_ARGS(&buffer)
   );
 
-  // ‰Šúƒf[ƒ^‚Ìw’è‚ª‚ ‚é‚Æ‚«‚É‚ÍƒRƒs[‚·‚é
+  // åˆæœŸãƒ‡ãƒ¼ã‚¿ã®æŒ‡å®šãŒã‚ã‚‹ã¨ãã«ã¯ã‚³ãƒ”ãƒ¼ã™ã‚‹
   if (SUCCEEDED(hr) && initialData != nullptr)
   {
     void* mapped;
@@ -297,22 +297,22 @@ CubeApp::ComPtr<ID3D12Resource1> CubeApp::CreateBuffer(UINT bufferSize, const vo
   return buffer;
 }
 
-// è“®‚Å¶¬”Å
+// æ‰‹å‹•ã§ç”Ÿæˆç‰ˆ
 CubeApp::ComPtr<ID3D12Resource1> CubeApp::CreateTexture(const std::string& fileName)
 {
   ComPtr<ID3D12Resource1> texture;
   int texWidth = 0, texHeight = 0, channels = 0;
   auto* pImage = stbi_load(fileName.c_str(), &texWidth, &texHeight, &channels, 0);
 
-  // ƒTƒCƒYEƒtƒH[ƒ}ƒbƒg‚©‚çƒeƒNƒXƒ`ƒƒƒŠƒ\[ƒX‚ÌDesc€”õ
+  // ã‚µã‚¤ã‚ºãƒ»ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã‹ã‚‰ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒªã‚½ãƒ¼ã‚¹ã®Descæº–å‚™
   auto texDesc = CD3DX12_RESOURCE_DESC::Tex2D(
     DXGI_FORMAT_R8G8B8A8_UNORM,
     texWidth, texHeight,
-    1,  // ”z—ñƒTƒCƒY
-    1   // ƒ~ƒbƒvƒ}ƒbƒv”
+    1,  // é…åˆ—ã‚µã‚¤ã‚º
+    1   // ãƒŸãƒƒãƒ—ãƒãƒƒãƒ—æ•°
   );
 
-  // ƒeƒNƒXƒ`ƒƒ¶¬
+  // ãƒ†ã‚¯ã‚¹ãƒãƒ£ç”Ÿæˆ
   m_device->CreateCommittedResource(
     &CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
     D3D12_HEAP_FLAG_NONE,
@@ -322,14 +322,14 @@ CubeApp::ComPtr<ID3D12Resource1> CubeApp::CreateTexture(const std::string& fileN
     IID_PPV_ARGS(&texture)
   );
 
-  // ƒXƒe[ƒWƒ“ƒOƒoƒbƒtƒ@€”õ
+  // ã‚¹ãƒ†ãƒ¼ã‚¸ãƒ³ã‚°ãƒãƒƒãƒ•ã‚¡æº–å‚™
   D3D12_PLACED_SUBRESOURCE_FOOTPRINT layouts;
   UINT numRows;
   UINT64 rowSizeBytes, totalBytes;
   m_device->GetCopyableFootprints(&texDesc, 0, 1, 0, &layouts, &numRows, &rowSizeBytes, &totalBytes);
   ComPtr<ID3D12Resource1> stagingBuffer = CreateBuffer(totalBytes, nullptr);
 
-  // ƒXƒe[ƒWƒ“ƒOƒoƒbƒtƒ@‚É‰æ‘œ‚ğƒRƒs[
+  // ã‚¹ãƒ†ãƒ¼ã‚¸ãƒ³ã‚°ãƒãƒƒãƒ•ã‚¡ã«ç”»åƒã‚’ã‚³ãƒ”ãƒ¼
   {
     const UINT imagePitch = texWidth * sizeof(uint32_t);
     void* pBuf;
@@ -343,13 +343,13 @@ CubeApp::ComPtr<ID3D12Resource1> CubeApp::CreateTexture(const std::string& fileN
     }
   }
 
-  // ƒRƒ}ƒ“ƒh€”õ.
+  // ã‚³ãƒãƒ³ãƒ‰æº–å‚™.
   ComPtr<ID3D12GraphicsCommandList> command;
   m_device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_commandAllocators[m_frameIndex].Get(), nullptr, IID_PPV_ARGS(&command));
   ComPtr<ID3D12Fence1> fence;
   m_device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence));
 
-  // “]‘—ƒRƒ}ƒ“ƒh
+  // è»¢é€ã‚³ãƒãƒ³ãƒ‰
   D3D12_TEXTURE_COPY_LOCATION src{}, dst{};
   dst.pResource = texture.Get();
   dst.SubresourceIndex = 0;
@@ -360,7 +360,7 @@ CubeApp::ComPtr<ID3D12Resource1> CubeApp::CreateTexture(const std::string& fileN
   src.PlacedFootprint = layouts;
   command->CopyTextureRegion(&dst, 0, 0, 0, &src, nullptr);
 
-  // ƒRƒs[Œã‚É‚ÍƒeƒNƒXƒ`ƒƒ‚Æ‚µ‚Ä‚ÌƒXƒe[ƒg‚Ö.
+  // ã‚³ãƒ”ãƒ¼å¾Œã«ã¯ãƒ†ã‚¯ã‚¹ãƒãƒ£ã¨ã—ã¦ã®ã‚¹ãƒ†ãƒ¼ãƒˆã¸.
   auto barrierTex = CD3DX12_RESOURCE_BARRIER::Transition(
     texture.Get(),
     D3D12_RESOURCE_STATE_COPY_DEST,
@@ -370,14 +370,14 @@ CubeApp::ComPtr<ID3D12Resource1> CubeApp::CreateTexture(const std::string& fileN
 
   command->Close();
 
-  // ƒRƒ}ƒ“ƒh‚ÌÀs
+  // ã‚³ãƒãƒ³ãƒ‰ã®å®Ÿè¡Œ
   ID3D12CommandList* cmds[] = { command.Get() };
   m_commandQueue->ExecuteCommandLists(1, cmds);
-  // Š®—¹‚µ‚½‚çƒVƒOƒiƒ‹‚ğ—§‚Ä‚é.
+  // å®Œäº†ã—ãŸã‚‰ã‚·ã‚°ãƒŠãƒ«ã‚’ç«‹ã¦ã‚‹.
   const UINT64 expected = 1;
   m_commandQueue->Signal(fence.Get(), expected);
 
-  // ƒeƒNƒXƒ`ƒƒ‚Ìˆ—‚ªŠ®—¹‚·‚é‚Ü‚Å‘Ò‚Â.
+  // ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®å‡¦ç†ãŒå®Œäº†ã™ã‚‹ã¾ã§å¾…ã¤.
   while (expected != fence->GetCompletedValue())
   {
     Sleep(1);
@@ -389,9 +389,9 @@ CubeApp::ComPtr<ID3D12Resource1> CubeApp::CreateTexture(const std::string& fileN
 
 void CubeApp::PrepareDescriptorHeapForCubeApp()
 {
-  // CBV/SRV ‚ÌƒfƒBƒXƒNƒŠƒvƒ^ƒq[ƒv
-  //  0:ƒVƒF[ƒ_[ƒŠƒ\[ƒXƒrƒ…[
-  //  1,2 : ’è”ƒoƒbƒtƒ@ƒrƒ…[ (FrameBufferCount”•ªg—p)
+  // CBV/SRV ã®ãƒ‡ã‚£ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ’ãƒ¼ãƒ—
+  //  0:ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ãƒªã‚½ãƒ¼ã‚¹ãƒ“ãƒ¥ãƒ¼
+  //  1,2 : å®šæ•°ãƒãƒƒãƒ•ã‚¡ãƒ“ãƒ¥ãƒ¼ (FrameBufferCountæ•°åˆ†ä½¿ç”¨)
   UINT count = FrameBufferCount + 1;
   D3D12_DESCRIPTOR_HEAP_DESC srvHeapDesc{
     D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
@@ -402,7 +402,7 @@ void CubeApp::PrepareDescriptorHeapForCubeApp()
   m_device->CreateDescriptorHeap(&srvHeapDesc, IID_PPV_ARGS(&m_heapSrvCbv));
   m_srvcbvDescriptorSize = m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
-  // ƒ_ƒCƒiƒ~ƒbƒNƒTƒ“ƒvƒ‰[‚ÌƒfƒBƒXƒNƒŠƒvƒ^ƒq[ƒv
+  // ãƒ€ã‚¤ãƒŠãƒŸãƒƒã‚¯ã‚µãƒ³ãƒ—ãƒ©ãƒ¼ã®ãƒ‡ã‚£ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ’ãƒ¼ãƒ—
   D3D12_DESCRIPTOR_HEAP_DESC samplerHeapDesc{
     D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER,
     1,

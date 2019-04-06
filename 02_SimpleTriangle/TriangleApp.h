@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "../common/D3D12AppBase.h"
 #include <DirectXMath.h>

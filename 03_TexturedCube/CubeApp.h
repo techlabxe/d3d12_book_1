@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "../common/D3D12AppBase.h"
 #include <DirectXMath.h>
@@ -30,7 +30,7 @@ public:
   {
     TextureSrvDescriptorBase = 0,
     ConstantBufferDescriptorBase = 1,
-    // ƒTƒ“ƒvƒ‰[‚Í•Êƒq[ƒv‚È‚Ì‚Åæ“ª‚ğg—p
+    // ã‚µãƒ³ãƒ—ãƒ©ãƒ¼ã¯åˆ¥ãƒ’ãƒ¼ãƒ—ãªã®ã§å…ˆé ­ã‚’ä½¿ç”¨
     SamplerDescriptorBase = 0,
   };
 private:

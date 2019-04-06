@@ -1,4 +1,4 @@
-#include "ModelApp.h"
+ï»¿#include "ModelApp.h"
 #include "streamreader.h"
 #include <DirectXTex.h>
 
@@ -7,7 +7,7 @@ using namespace std;
 
 void ModelApp::Prepare()
 {
-  // ƒ‚ƒfƒ‹ƒf[ƒ^‚Ì“Ç‚İ‚İ
+  // ãƒ¢ãƒ‡ãƒ«ãƒ‡ãƒ¼ã‚¿ã®èª­ã¿è¾¼ã¿
   auto modelFilePath = experimental::filesystem::path("alicia-solid.vrm");
   if (modelFilePath.is_relative())
   {
@@ -20,13 +20,13 @@ void ModelApp::Prepare()
   auto glbResourceReader = make_shared<Microsoft::glTF::GLBResourceReader>(std::move(reader), std::move(glbStream));
   auto document = Microsoft::glTF::Deserialize(glbResourceReader->GetJson());
 
-  // ƒ}ƒeƒŠƒAƒ‹”•ª‚ÌSRVƒfƒBƒXƒNƒŠƒvƒ^‚ª•K—v‚É‚È‚é‚Ì‚Å‚±‚±‚Å€”õ.
+  // ãƒãƒ†ãƒªã‚¢ãƒ«æ•°åˆ†ã®SRVãƒ‡ã‚£ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãŒå¿…è¦ã«ãªã‚‹ã®ã§ã“ã“ã§æº–å‚™.
   PrepareDescriptorHeapForModelApp(document.materials.Elements().size());
 
   MakeModelGeometry(document, glbResourceReader);
   MakeModelMaterial(document, glbResourceReader);
 
-  // ƒVƒF[ƒ_[‚ğƒRƒ“ƒpƒCƒ‹.
+  // ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã‚’ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«.
   HRESULT hr;
   ComPtr<ID3DBlob> errBlob;
   hr = CompileShaderFromFile(L"shaderVS.hlsl", L"vs_6_0", m_vs, errBlob);
@@ -48,16 +48,16 @@ void ModelApp::Prepare()
   m_srvDescriptorBase = FrameBufferCount;
 
   CD3DX12_DESCRIPTOR_RANGE cbv, srv, sampler;
-  cbv.Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0); // b0 ƒŒƒWƒXƒ^
-  srv.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0); // t0 ƒŒƒWƒXƒ^
-  sampler.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER, 1, 0); // s0 ƒŒƒWƒXƒ^
+  cbv.Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0); // b0 ãƒ¬ã‚¸ã‚¹ã‚¿
+  srv.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0); // t0 ãƒ¬ã‚¸ã‚¹ã‚¿
+  sampler.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER, 1, 0); // s0 ãƒ¬ã‚¸ã‚¹ã‚¿
 
   CD3DX12_ROOT_PARAMETER rootParams[3];
   rootParams[0].InitAsDescriptorTable(1, &cbv, D3D12_SHADER_VISIBILITY_VERTEX);
   rootParams[1].InitAsDescriptorTable(1, &srv, D3D12_SHADER_VISIBILITY_PIXEL);
   rootParams[2].InitAsDescriptorTable(1, &sampler, D3D12_SHADER_VISIBILITY_PIXEL);
 
-  // ƒ‹[ƒgƒVƒOƒlƒ`ƒƒ‚Ì\’z
+  // ãƒ«ãƒ¼ãƒˆã‚·ã‚°ãƒãƒãƒ£ã®æ§‹ç¯‰
   CD3DX12_ROOT_SIGNATURE_DESC rootSigDesc{};
   rootSigDesc.Init(
     _countof(rootParams), rootParams,   //pParameters
@@ -70,7 +70,7 @@ void ModelApp::Prepare()
   {
     throw std::runtime_error("D3D12SerializeRootSignature faild.");
   }
-  // RootSignature ‚Ì¶¬
+  // RootSignature ã®ç”Ÿæˆ
   hr = m_device->CreateRootSignature(
     0,
     signature->GetBufferPointer(), signature->GetBufferSize(),
@@ -85,7 +85,7 @@ void ModelApp::Prepare()
   m_pipelineAlpha = CreateAlphaPSO();
 
 
-  // ’è”ƒoƒbƒtƒ@/’è”ƒoƒbƒtƒ@ƒrƒ…[‚Ì¶¬
+  // å®šæ•°ãƒãƒƒãƒ•ã‚¡/å®šæ•°ãƒãƒƒãƒ•ã‚¡ãƒ“ãƒ¥ãƒ¼ã®ç”Ÿæˆ
   m_constantBuffers.resize(FrameBufferCount);
   m_cbViews.resize(FrameBufferCount);
   for (UINT i = 0; i < FrameBufferCount; ++i)
@@ -102,7 +102,7 @@ void ModelApp::Prepare()
     m_cbViews[i] = CD3DX12_GPU_DESCRIPTOR_HANDLE(m_heapSrvCbv->GetGPUDescriptorHandleForHeapStart(), ConstantBufferDescriptorBase + i, m_srvcbvDescriptorSize);
   }
 
-  // ƒTƒ“ƒvƒ‰[‚Ì¶¬
+  // ã‚µãƒ³ãƒ—ãƒ©ãƒ¼ã®ç”Ÿæˆ
   D3D12_SAMPLER_DESC samplerDesc{};
   samplerDesc.Filter = D3D12_ENCODE_BASIC_FILTER(
     D3D12_FILTER_TYPE_LINEAR, // min
@@ -116,7 +116,7 @@ void ModelApp::Prepare()
   samplerDesc.MinLOD = -FLT_MAX;
   samplerDesc.ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
 
-  // ƒTƒ“ƒvƒ‰[—pƒfƒBƒXƒNƒŠƒvƒ^ƒq[ƒv‚Ì0”Ô–Ú‚ğg—p‚·‚é
+  // ã‚µãƒ³ãƒ—ãƒ©ãƒ¼ç”¨ãƒ‡ã‚£ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ’ãƒ¼ãƒ—ã®0ç•ªç›®ã‚’ä½¿ç”¨ã™ã‚‹
   auto descriptorSampler = CD3DX12_CPU_DESCRIPTOR_HANDLE(m_heapSampler->GetCPUDescriptorHandleForHeapStart(), SamplerDescriptorBase, m_samplerDescriptorSize);
   m_device->CreateSampler(&samplerDesc, descriptorSampler);
   m_sampler = CD3DX12_GPU_DESCRIPTOR_HANDLE(m_heapSampler->GetGPUDescriptorHandleForHeapStart(), SamplerDescriptorBase, m_samplerDescriptorSize);
@@ -132,7 +132,7 @@ void ModelApp::MakeCommand(ComPtr<ID3D12GraphicsCommandList>& command)
   using namespace DirectX;
   using namespace Microsoft::glTF;
 
-  // Šes—ñ‚ÌƒZƒbƒg.
+  // å„è¡Œåˆ—ã®ã‚»ãƒƒãƒˆ.
   ShaderParameters shaderParams;
   XMStoreFloat4x4(&shaderParams.mtxWorld, XMMatrixRotationAxis(XMVectorSet(0.0f,1.0f,0.0f,0.0f), XMConvertToRadians(0.0f)));
   auto mtxView = XMMatrixLookAtLH(
@@ -144,7 +144,7 @@ void ModelApp::MakeCommand(ComPtr<ID3D12GraphicsCommandList>& command)
   XMStoreFloat4x4(&shaderParams.mtxView, XMMatrixTranspose(mtxView));
   XMStoreFloat4x4(&shaderParams.mtxProj, XMMatrixTranspose(mtxProj));
 
-  // ’è”ƒoƒbƒtƒ@‚ÌXV.
+  // å®šæ•°ãƒãƒƒãƒ•ã‚¡ã®æ›´æ–°.
   auto& constantBuffer = m_constantBuffers[m_frameIndex];
   {
     void* p;
@@ -154,13 +154,13 @@ void ModelApp::MakeCommand(ComPtr<ID3D12GraphicsCommandList>& command)
     constantBuffer->Unmap(0, nullptr);
   }
 
-  // ƒ‹[ƒgƒVƒOƒlƒ`ƒƒ‚ÌƒZƒbƒg
+  // ãƒ«ãƒ¼ãƒˆã‚·ã‚°ãƒãƒãƒ£ã®ã‚»ãƒƒãƒˆ
   command->SetGraphicsRootSignature(m_rootSignature.Get());
-  // ƒrƒ…[ƒ|[ƒg‚ÆƒVƒU[‚ÌƒZƒbƒg
+  // ãƒ“ãƒ¥ãƒ¼ãƒãƒ¼ãƒˆã¨ã‚·ã‚¶ãƒ¼ã®ã‚»ãƒƒãƒˆ
   command->RSSetViewports(1, &m_viewport);
   command->RSSetScissorRects(1, &m_scissorRect);
 
-  // ƒfƒBƒXƒNƒŠƒvƒ^ƒq[ƒv‚ğƒZƒbƒg.
+  // ãƒ‡ã‚£ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ’ãƒ¼ãƒ—ã‚’ã‚»ãƒƒãƒˆ.
   ID3D12DescriptorHeap* heaps[] = {
     m_heapSrvCbv.Get(), m_heapSampler.Get()
   };
@@ -171,12 +171,12 @@ void ModelApp::MakeCommand(ComPtr<ID3D12GraphicsCommandList>& command)
     for (const auto& mesh : m_model.meshes)
     {
       auto& material = m_model.materials[mesh.materialIndex];
-      // ‘Î‰‚·‚éƒ|ƒŠƒSƒ“ƒƒbƒVƒ…‚Ì‚İ‚ğ•`‰æ‚·‚é
+      // å¯¾å¿œã™ã‚‹ãƒãƒªã‚´ãƒ³ãƒ¡ãƒƒã‚·ãƒ¥ã®ã¿ã‚’æç”»ã™ã‚‹
       if (material.alphaMode == mode)
       {
         continue;
       }
-      // ƒ‚[ƒh‚É‰‚¶‚Äg—p‚·‚éƒpƒCƒvƒ‰ƒCƒ“ƒXƒe[ƒg‚ğ•Ï‚¦‚é.
+      // ãƒ¢ãƒ¼ãƒ‰ã«å¿œã˜ã¦ä½¿ç”¨ã™ã‚‹ãƒ‘ã‚¤ãƒ—ãƒ©ã‚¤ãƒ³ã‚¹ãƒ†ãƒ¼ãƒˆã‚’å¤‰ãˆã‚‹.
       switch (mode)
       {
       case Microsoft::glTF::ALPHA_OPAQUE:
@@ -190,7 +190,7 @@ void ModelApp::MakeCommand(ComPtr<ID3D12GraphicsCommandList>& command)
         break;
       }
 
-      // ƒvƒŠƒ~ƒeƒBƒuƒ^ƒCƒvA’¸“_EƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@‚ÌƒZƒbƒg
+      // ãƒ—ãƒªãƒŸãƒ†ã‚£ãƒ–ã‚¿ã‚¤ãƒ—ã€é ‚ç‚¹ãƒ»ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ã®ã‚»ãƒƒãƒˆ
       command->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
       command->IASetVertexBuffers(0, 1, &mesh.vertexBuffer.vertexView);
       command->IASetIndexBuffer(&mesh.indexBuffer.indexView);
@@ -199,7 +199,7 @@ void ModelApp::MakeCommand(ComPtr<ID3D12GraphicsCommandList>& command)
       command->SetGraphicsRootDescriptorTable(1, material.shaderResourceView);
       command->SetGraphicsRootDescriptorTable(2, m_sampler);
 
-      // ‚±‚ÌƒƒbƒVƒ…‚ğ•`‰æ
+      // ã“ã®ãƒ¡ãƒƒã‚·ãƒ¥ã‚’æç”»
       command->DrawIndexedInstanced(mesh.indexCount, 1, 0, 0, 0);
     }
   }
@@ -232,7 +232,7 @@ ModelApp::ComPtr<ID3D12Resource1> ModelApp::CreateBuffer(UINT bufferSize, const 
     IID_PPV_ARGS(&buffer)
   );
 
-  // ‰Šúƒf[ƒ^‚Ìw’è‚ª‚ ‚é‚Æ‚«‚É‚ÍƒRƒs[‚·‚é
+  // åˆæœŸãƒ‡ãƒ¼ã‚¿ã®æŒ‡å®šãŒã‚ã‚‹ã¨ãã«ã¯ã‚³ãƒ”ãƒ¼ã™ã‚‹
   if (SUCCEEDED(hr) && initialData != nullptr)
   {
     void* mapped;
@@ -250,7 +250,7 @@ ModelApp::ComPtr<ID3D12Resource1> ModelApp::CreateBuffer(UINT bufferSize, const 
 
 ModelApp::TextureObject ModelApp::CreateTextureFromMemory(const std::vector<char>& imageData)
 {
-  // VRM ‚È‚Ì‚Å png/jpeg ‚È‚Ç‚Ìƒtƒ@ƒCƒ‹‚ğ‘z’è‚µAWIC ‚Å“Ç‚İ‚Ş.
+  // VRM ãªã®ã§ png/jpeg ãªã©ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æƒ³å®šã—ã€WIC ã§èª­ã¿è¾¼ã‚€.
   ComPtr<ID3D12Resource1> staging;
   HRESULT hr;
   ScratchImage image;
@@ -269,7 +269,7 @@ ModelApp::TextureObject ModelApp::CreateTextureFromMemory(const std::vector<char
   ComPtr<ID3D12Resource> texture;
   DirectX::CreateTexture(m_device.Get(), metadata, &texture);
 
-  // ƒXƒe[ƒWƒ“ƒOƒoƒbƒtƒ@‚Ì€”õ
+  // ã‚¹ãƒ†ãƒ¼ã‚¸ãƒ³ã‚°ãƒãƒƒãƒ•ã‚¡ã®æº–å‚™
   const auto totalBytes = GetRequiredIntermediateSize(texture.Get(), 0, subresources.size());
   m_device->CreateCommittedResource(
     &CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
@@ -280,7 +280,7 @@ ModelApp::TextureObject ModelApp::CreateTextureFromMemory(const std::vector<char
     IID_PPV_ARGS(&staging)
   );
 
-  // “]‘—ˆ—
+  // è»¢é€å‡¦ç†
   ComPtr<ID3D12GraphicsCommandList> command;
   m_device->CreateCommandList(
     0, D3D12_COMMAND_LIST_TYPE_DIRECT, 
@@ -293,7 +293,7 @@ ModelApp::TextureObject ModelApp::CreateTextureFromMemory(const std::vector<char
     0, 0, uint32_t(subresources.size()), subresources.data()
   );
 
-  // ƒŠƒ\[ƒXƒoƒŠƒA‚ÌƒZƒbƒg
+  // ãƒªã‚½ãƒ¼ã‚¹ãƒãƒªã‚¢ã®ã‚»ãƒƒãƒˆ
   auto barrierTex = CD3DX12_RESOURCE_BARRIER::Transition(
     texture.Get(),
     D3D12_RESOURCE_STATE_COPY_DEST,
@@ -301,7 +301,7 @@ ModelApp::TextureObject ModelApp::CreateTextureFromMemory(const std::vector<char
   );
   command->ResourceBarrier(1, &barrierTex);
 
-  // ƒRƒ}ƒ“ƒh‚ÌÀs.
+  // ã‚³ãƒãƒ³ãƒ‰ã®å®Ÿè¡Œ.
   command->Close();
   ID3D12CommandList* cmds[] = { command.Get() };
   m_commandQueue->ExecuteCommandLists(1, cmds);
@@ -320,9 +320,9 @@ void ModelApp::PrepareDescriptorHeapForModelApp(UINT materialCount)
   m_srvDescriptorBase = FrameBufferCount;
   UINT countCBVSRVDescriptors = materialCount + FrameBufferCount;
 
-  // CBV/SRV ‚ÌƒfƒBƒXƒNƒŠƒvƒ^ƒq[ƒv
-  //  0, 1:’è”ƒoƒbƒtƒ@ƒrƒ…[ (FrameBufferCount”•ªg—p)
-  //  FrameBufferCount ` :  Šeƒ}ƒeƒŠƒAƒ‹‚ÌƒeƒNƒXƒ`ƒƒ(ƒVƒF[ƒ_[ƒŠƒ\[ƒXƒrƒ…[)
+  // CBV/SRV ã®ãƒ‡ã‚£ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ’ãƒ¼ãƒ—
+  //  0, 1:å®šæ•°ãƒãƒƒãƒ•ã‚¡ãƒ“ãƒ¥ãƒ¼ (FrameBufferCountæ•°åˆ†ä½¿ç”¨)
+  //  FrameBufferCount ï½ :  å„ãƒãƒ†ãƒªã‚¢ãƒ«ã®ãƒ†ã‚¯ã‚¹ãƒãƒ£(ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ãƒªã‚½ãƒ¼ã‚¹ãƒ“ãƒ¥ãƒ¼)
   D3D12_DESCRIPTOR_HEAP_DESC srvHeapDesc{
     D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
     countCBVSRVDescriptors,
@@ -332,7 +332,7 @@ void ModelApp::PrepareDescriptorHeapForModelApp(UINT materialCount)
   m_device->CreateDescriptorHeap(&srvHeapDesc, IID_PPV_ARGS(&m_heapSrvCbv));
   m_srvcbvDescriptorSize = m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
-  // ƒ_ƒCƒiƒ~ƒbƒNƒTƒ“ƒvƒ‰[‚ÌƒfƒBƒXƒNƒŠƒvƒ^ƒq[ƒv
+  // ãƒ€ã‚¤ãƒŠãƒŸãƒƒã‚¯ã‚µãƒ³ãƒ—ãƒ©ãƒ¼ã®ãƒ‡ã‚£ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ’ãƒ¼ãƒ—
   D3D12_DESCRIPTOR_HEAP_DESC samplerHeapDesc{
     D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER,
     1,
@@ -353,20 +353,20 @@ void ModelApp::MakeModelGeometry(const Microsoft::glTF::Document& doc, std::shar
       std::vector<Vertex> vertices;
       std::vector<uint32_t> indices;
 
-      // ’¸“_ˆÊ’uî•ñƒAƒNƒZƒbƒT‚Ìæ“¾
+      // é ‚ç‚¹ä½ç½®æƒ…å ±ã‚¢ã‚¯ã‚»ãƒƒã‚µã®å–å¾—
       auto& idPos = meshPrimitive.GetAttributeAccessorId(ACCESSOR_POSITION);
       auto& accPos = doc.accessors.Get(idPos);
-      // –@üî•ñƒAƒNƒZƒbƒT‚Ìæ“¾
+      // æ³•ç·šæƒ…å ±ã‚¢ã‚¯ã‚»ãƒƒã‚µã®å–å¾—
       auto& idNrm = meshPrimitive.GetAttributeAccessorId(ACCESSOR_NORMAL);
       auto& accNrm = doc.accessors.Get(idNrm);
-      // ƒeƒNƒXƒ`ƒƒÀ•Wî•ñƒAƒNƒZƒbƒT‚Ìæ“¾
+      // ãƒ†ã‚¯ã‚¹ãƒãƒ£åº§æ¨™æƒ…å ±ã‚¢ã‚¯ã‚»ãƒƒã‚µã®å–å¾—
       auto& idUV = meshPrimitive.GetAttributeAccessorId(ACCESSOR_TEXCOORD_0);
       auto& accUV = doc.accessors.Get(idUV);
-      // ’¸“_ƒCƒ“ƒfƒbƒNƒX—pƒAƒNƒZƒbƒT‚Ìæ“¾
+      // é ‚ç‚¹ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ç”¨ã‚¢ã‚¯ã‚»ãƒƒã‚µã®å–å¾—
       auto& idIndex = meshPrimitive.indicesAccessorId;
       auto& accIndex = doc.accessors.Get(idIndex);
 
-      // ƒAƒNƒZƒbƒT‚©‚çƒf[ƒ^—ñ‚ğæ“¾
+      // ã‚¢ã‚¯ã‚»ãƒƒã‚µã‹ã‚‰ãƒ‡ãƒ¼ã‚¿åˆ—ã‚’å–å¾—
       auto vertPos = reader->ReadBinaryData<float>(doc, accPos);
       auto vertNrm = reader->ReadBinaryData<float>(doc, accNrm);
       auto vertUV = reader->ReadBinaryData<float>(doc, accUV);
@@ -374,7 +374,7 @@ void ModelApp::MakeModelGeometry(const Microsoft::glTF::Document& doc, std::shar
       auto vertexCount = accPos.count;
       for (uint32_t i = 0; i < vertexCount; ++i)
       {
-        // ’¸“_ƒf[ƒ^‚Ì\’z
+        // é ‚ç‚¹ãƒ‡ãƒ¼ã‚¿ã®æ§‹ç¯‰
         int vid0 = 3 * i, vid1 = 3 * i + 1, vid2 = 3 * i + 2;
         int tid0 = 2 * i, tid1 = 2 * i + 1;
         vertices.emplace_back(
@@ -385,7 +385,7 @@ void ModelApp::MakeModelGeometry(const Microsoft::glTF::Document& doc, std::shar
           }
         );
       }
-      // ƒCƒ“ƒfƒbƒNƒXƒf[ƒ^
+      // ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒ‡ãƒ¼ã‚¿
       indices = reader->ReadBinaryData<uint32_t>(doc, accIndex);
 
       auto vbSize = sizeof(Vertex) * vertices.size();
@@ -430,13 +430,13 @@ void ModelApp::MakeModelMaterial(const Microsoft::glTF::Document& doc, std::shar
     auto imageBufferView = doc.bufferViews.Get(image.bufferViewId);
     auto imageData = reader->ReadBinaryData<char>(doc, imageBufferView);
 
-    // imageData ‚ª‰æ‘œƒf[ƒ^
+    // imageData ãŒç”»åƒãƒ‡ãƒ¼ã‚¿
     Material material{};
     material.alphaMode = m.alphaMode;
     auto texObj = CreateTextureFromMemory(imageData);
     material.texture = texObj.texture;
 
-    // ƒVƒF[ƒ_[ƒŠƒ\[ƒXƒrƒ…[‚Ì¶¬.
+    // ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ãƒªã‚½ãƒ¼ã‚¹ãƒ“ãƒ¥ãƒ¼ã®ç”Ÿæˆ.
     auto descriptorIndex = m_srvDescriptorBase + textureIndex;
     auto srvHandle = CD3DX12_CPU_DESCRIPTOR_HANDLE(
       m_heapSrvCbv->GetCPUDescriptorHandleForHeapStart(), 
@@ -463,36 +463,36 @@ void ModelApp::MakeModelMaterial(const Microsoft::glTF::Document& doc, std::shar
 
 ModelApp::ComPtr<ID3D12PipelineState> ModelApp::CreateOpaquePSO()
 {
-  // ƒCƒ“ƒvƒbƒgƒŒƒCƒAƒEƒg
+  // ã‚¤ãƒ³ãƒ—ãƒƒãƒˆãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆ
   D3D12_INPUT_ELEMENT_DESC inputElementDesc[] = {
     { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, offsetof(Vertex, Pos), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA},
     { "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT,0, offsetof(Vertex,Normal), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA},
     { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, offsetof(Vertex,UV), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA}
   };
 
-  // ƒpƒCƒvƒ‰ƒCƒ“ƒXƒe[ƒgƒIƒuƒWƒFƒNƒg‚Ì¶¬.
+  // ãƒ‘ã‚¤ãƒ—ãƒ©ã‚¤ãƒ³ã‚¹ãƒ†ãƒ¼ãƒˆã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç”Ÿæˆ.
   D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc{};
-  // ƒVƒF[ƒ_[‚ÌƒZƒbƒg
+  // ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã®ã‚»ãƒƒãƒˆ
   psoDesc.VS = CD3DX12_SHADER_BYTECODE(m_vs.Get());
   psoDesc.PS = CD3DX12_SHADER_BYTECODE(m_psOpaque.Get());
-  // ƒuƒŒƒ“ƒhƒXƒe[ƒgİ’è
+  // ãƒ–ãƒ¬ãƒ³ãƒ‰ã‚¹ãƒ†ãƒ¼ãƒˆè¨­å®š
   psoDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
-  // ƒ‰ƒXƒ^ƒ‰ƒCƒU[ƒXƒe[ƒg
+  // ãƒ©ã‚¹ã‚¿ãƒ©ã‚¤ã‚¶ãƒ¼ã‚¹ãƒ†ãƒ¼ãƒˆ
   psoDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-  // o—Íæ‚Í1ƒ^[ƒQƒbƒg
+  // å‡ºåŠ›å…ˆã¯1ã‚¿ãƒ¼ã‚²ãƒƒãƒˆ
   psoDesc.NumRenderTargets = 1;
   psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
-  // ƒfƒvƒXƒoƒbƒtƒ@‚ÌƒtƒH[ƒ}ƒbƒg‚ğİ’è
+  // ãƒ‡ãƒ—ã‚¹ãƒãƒƒãƒ•ã‚¡ã®ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã‚’è¨­å®š
   psoDesc.DSVFormat = DXGI_FORMAT_D32_FLOAT;
   psoDesc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
   psoDesc.InputLayout = { inputElementDesc, _countof(inputElementDesc) };
 
-  // ƒ‹[ƒgƒVƒOƒlƒ`ƒƒ‚ÌƒZƒbƒg
+  // ãƒ«ãƒ¼ãƒˆã‚·ã‚°ãƒãƒãƒ£ã®ã‚»ãƒƒãƒˆ
   psoDesc.pRootSignature = m_rootSignature.Get();
   psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
-  // ƒ}ƒ‹ƒ`ƒTƒ“ƒvƒ‹İ’è
+  // ãƒãƒ«ãƒã‚µãƒ³ãƒ—ãƒ«è¨­å®š
   psoDesc.SampleDesc = { 1,0 };
-  psoDesc.SampleMask = UINT_MAX; // ‚±‚ê‚ğ–Y‚ê‚é‚ÆŠG‚ªo‚È‚¢•Œx‚ào‚È‚¢‚Ì‚Å’ˆÓ.
+  psoDesc.SampleMask = UINT_MAX; // ã“ã‚Œã‚’å¿˜ã‚Œã‚‹ã¨çµµãŒå‡ºãªã„ï¼†è­¦å‘Šã‚‚å‡ºãªã„ã®ã§æ³¨æ„.
 
   ComPtr<ID3D12PipelineState> pipeline;
   HRESULT hr;
@@ -506,19 +506,19 @@ ModelApp::ComPtr<ID3D12PipelineState> ModelApp::CreateOpaquePSO()
 
 ModelApp::ComPtr<ID3D12PipelineState> ModelApp::CreateAlphaPSO()
 {
-  // ƒCƒ“ƒvƒbƒgƒŒƒCƒAƒEƒg
+  // ã‚¤ãƒ³ãƒ—ãƒƒãƒˆãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆ
   D3D12_INPUT_ELEMENT_DESC inputElementDesc[] = {
     { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, offsetof(Vertex, Pos), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA},
     { "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT,0, offsetof(Vertex,Normal), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA},
     { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, offsetof(Vertex,UV), D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA}
   };
 
-  // ƒpƒCƒvƒ‰ƒCƒ“ƒXƒe[ƒgƒIƒuƒWƒFƒNƒg‚Ì¶¬.
+  // ãƒ‘ã‚¤ãƒ—ãƒ©ã‚¤ãƒ³ã‚¹ãƒ†ãƒ¼ãƒˆã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç”Ÿæˆ.
   D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc{};
-  // ƒVƒF[ƒ_[‚ÌƒZƒbƒg
+  // ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã®ã‚»ãƒƒãƒˆ
   psoDesc.VS = CD3DX12_SHADER_BYTECODE(m_vs.Get());
   psoDesc.PS = CD3DX12_SHADER_BYTECODE(m_psAlpha.Get());
-  // ƒuƒŒƒ“ƒhƒXƒe[ƒgİ’è(”¼“§–¾—pİ’è)
+  // ãƒ–ãƒ¬ãƒ³ãƒ‰ã‚¹ãƒ†ãƒ¼ãƒˆè¨­å®š(åŠé€æ˜ç”¨è¨­å®š)
   psoDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
   auto& target = psoDesc.BlendState.RenderTarget[0];
   target.BlendEnable = TRUE;
@@ -526,24 +526,24 @@ ModelApp::ComPtr<ID3D12PipelineState> ModelApp::CreateAlphaPSO()
   target.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;
   target.SrcBlendAlpha = D3D12_BLEND_SRC_ALPHA;
   target.DestBlendAlpha = D3D12_BLEND_INV_SRC_ALPHA;
-  // ƒ‰ƒXƒ^ƒ‰ƒCƒU[ƒXƒe[ƒg
+  // ãƒ©ã‚¹ã‚¿ãƒ©ã‚¤ã‚¶ãƒ¼ã‚¹ãƒ†ãƒ¼ãƒˆ
   psoDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
-  // o—Íæ‚Í1ƒ^[ƒQƒbƒg
+  // å‡ºåŠ›å…ˆã¯1ã‚¿ãƒ¼ã‚²ãƒƒãƒˆ
   psoDesc.NumRenderTargets = 1;
   psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
-  // ƒfƒvƒXƒoƒbƒtƒ@‚ÌƒtƒH[ƒ}ƒbƒg‚ğİ’è
+  // ãƒ‡ãƒ—ã‚¹ãƒãƒƒãƒ•ã‚¡ã®ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã‚’è¨­å®š
   psoDesc.DSVFormat = DXGI_FORMAT_D32_FLOAT;
-  // ƒfƒvƒXƒeƒXƒg‚Ì‚İ‚ğ—LŒø‰»(‘‚«‚İ‚ğs‚í‚È‚¢)
+  // ãƒ‡ãƒ—ã‚¹ãƒ†ã‚¹ãƒˆã®ã¿ã‚’æœ‰åŠ¹åŒ–(æ›¸ãè¾¼ã¿ã‚’è¡Œã‚ãªã„)
   psoDesc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
   psoDesc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
   psoDesc.InputLayout = { inputElementDesc, _countof(inputElementDesc) };
 
-  // ƒ‹[ƒgƒVƒOƒlƒ`ƒƒ‚ÌƒZƒbƒg
+  // ãƒ«ãƒ¼ãƒˆã‚·ã‚°ãƒãƒãƒ£ã®ã‚»ãƒƒãƒˆ
   psoDesc.pRootSignature = m_rootSignature.Get();
   psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
-  // ƒ}ƒ‹ƒ`ƒTƒ“ƒvƒ‹İ’è
+  // ãƒãƒ«ãƒã‚µãƒ³ãƒ—ãƒ«è¨­å®š
   psoDesc.SampleDesc = { 1,0 };
-  psoDesc.SampleMask = UINT_MAX; // ‚±‚ê‚ğ–Y‚ê‚é‚ÆŠG‚ªo‚È‚¢•Œx‚ào‚È‚¢‚Ì‚Å’ˆÓ.
+  psoDesc.SampleMask = UINT_MAX; // ã“ã‚Œã‚’å¿˜ã‚Œã‚‹ã¨çµµãŒå‡ºãªã„ï¼†è­¦å‘Šã‚‚å‡ºãªã„ã®ã§æ³¨æ„.
 
   ComPtr<ID3D12PipelineState> pipeline;
   HRESULT hr;

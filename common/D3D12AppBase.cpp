@@ -1,9 +1,9 @@
-#include "D3D12AppBase.h"
+ï»¿#include "D3D12AppBase.h"
 #include <exception>
 #include <fstream>
 #include <experimental/filesystem>
 
-// DirectX Shader Compiler —p(‘æ7Í‚Åà–¾)
+// DirectX Shader Compiler ç”¨(ç¬¬7ç« ã§èª¬æ˜)
 #include <dxcapi.h>
 #pragma comment(lib, "dxcompiler.lib")
 
@@ -34,7 +34,7 @@ void D3D12AppBase::Initialize(HWND hwnd)
     debug->EnableDebugLayer();
     dxgiFlags |= DXGI_CREATE_FACTORY_DEBUG;
 
-#if 0 // GBV ‚ğ—LŒø‰»‚·‚éê‡.
+#if 0 // GBV ã‚’æœ‰åŠ¹åŒ–ã™ã‚‹å ´åˆ.
     ComPtr<ID3D12Debug3> debug3;
     debug.As(&debug3);
     if (debug3)
@@ -51,7 +51,7 @@ void D3D12AppBase::Initialize(HWND hwnd)
     throw std::runtime_error("CreateDXGIFactory2 failed.");
   }
 
-  // ƒn[ƒhƒEƒFƒAƒAƒ_ƒvƒ^‚ÌŒŸõ
+  // ãƒãƒ¼ãƒ‰ã‚¦ã‚§ã‚¢ã‚¢ãƒ€ãƒ—ã‚¿ã®æ¤œç´¢
   ComPtr<IDXGIAdapter1> useAdapter;
   {
     UINT adapterIndex = 0;
@@ -64,7 +64,7 @@ void D3D12AppBase::Initialize(HWND hwnd)
       if (desc1.Flags & DXGI_ADAPTER_FLAG_SOFTWARE)
         continue;
 
-      // D3D12‚Íg—p‰Â”\‚©
+      // D3D12ã¯ä½¿ç”¨å¯èƒ½ã‹
       hr = D3D12CreateDevice(
         adapter.Get(),
         D3D_FEATURE_LEVEL_11_0,
@@ -72,7 +72,7 @@ void D3D12AppBase::Initialize(HWND hwnd)
       if (SUCCEEDED(hr))
         break;
     }
-    adapter.As(&useAdapter); // g—p‚·‚éƒAƒ_ƒvƒ^[
+    adapter.As(&useAdapter); // ä½¿ç”¨ã™ã‚‹ã‚¢ãƒ€ãƒ—ã‚¿ãƒ¼
   }
 
   hr = D3D12CreateDevice(useAdapter.Get(), D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&m_device));
@@ -80,7 +80,7 @@ void D3D12AppBase::Initialize(HWND hwnd)
   {
     throw new std::runtime_error("D3D12CreateDevice failed.");
   }
-  // ƒRƒ}ƒ“ƒhƒLƒ…[‚Ì¶¬
+  // ã‚³ãƒãƒ³ãƒ‰ã‚­ãƒ¥ãƒ¼ã®ç”Ÿæˆ
   D3D12_COMMAND_QUEUE_DESC queueDesc{
     D3D12_COMMAND_LIST_TYPE_DIRECT,
     0,
@@ -93,14 +93,14 @@ void D3D12AppBase::Initialize(HWND hwnd)
     throw std::runtime_error("CreateCommandQueue failed.");
   }
 
-  // HWND ‚©‚çƒNƒ‰ƒCƒAƒ“ƒg—ÌˆæƒTƒCƒY‚ğ”»’è‚·‚éB
-  // (ƒEƒBƒ“ƒhƒEƒTƒCƒY‚ğ‚à‚ç‚Á‚Ä‚»‚ê‚ğg—p‚·‚é‚Ì‚à‚æ‚¢)
+  // HWND ã‹ã‚‰ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆé ˜åŸŸã‚µã‚¤ã‚ºã‚’åˆ¤å®šã™ã‚‹ã€‚
+  // (ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚µã‚¤ã‚ºã‚’ã‚‚ã‚‰ã£ã¦ãã‚Œã‚’ä½¿ç”¨ã™ã‚‹ã®ã‚‚ã‚ˆã„)
   RECT rect;
   GetClientRect(hwnd, &rect);
   int width = rect.right - rect.left;
   int height = rect.bottom - rect.top;
 
-  // ƒXƒƒbƒvƒ`ƒFƒCƒ“‚Ì¶¬
+  // ã‚¹ãƒ¯ãƒƒãƒ—ãƒã‚§ã‚¤ãƒ³ã®ç”Ÿæˆ
   {
     DXGI_SWAP_CHAIN_DESC1 scDesc{};
     scDesc.BufferCount = FrameBufferCount;
@@ -124,22 +124,22 @@ void D3D12AppBase::Initialize(HWND hwnd)
       throw std::runtime_error("CreateSwapChainForHwnd failed.");
     }
 
-    swapchain.As(&m_swapchain); // IDXGISwapChain4 æ“¾
+    swapchain.As(&m_swapchain); // IDXGISwapChain4 å–å¾—
   }
 
-  // ŠeƒfƒBƒXƒNƒŠƒvƒ^ƒq[ƒv‚Ì€”õ.
+  // å„ãƒ‡ã‚£ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ’ãƒ¼ãƒ—ã®æº–å‚™.
   PrepareDescriptorHeaps();
-  // ƒŒƒ“ƒ_[ƒ^[ƒQƒbƒgƒrƒ…[‚Ì¶¬.
+  // ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãƒ“ãƒ¥ãƒ¼ã®ç”Ÿæˆ.
   PrepareRenderTargetView();
-  //// ƒfƒvƒXƒoƒbƒtƒ@ŠÖ˜A‚Ì€”õ.
+  //// ãƒ‡ãƒ—ã‚¹ãƒãƒƒãƒ•ã‚¡é–¢é€£ã®æº–å‚™.
   CreateDepthBuffer(width, height);
 
-  // ƒRƒ}ƒ“ƒhƒAƒƒP[ƒ^|‚Ì€”õ.
+  // ã‚³ãƒãƒ³ãƒ‰ã‚¢ãƒ­ã‚±ãƒ¼ã‚¿ï¼ã®æº–å‚™.
   CreateCommandAllocators();
-  // •`‰æƒtƒŒ[ƒ€“¯Šú—pƒtƒFƒ“ƒX¶¬.
+  // æç”»ãƒ•ãƒ¬ãƒ¼ãƒ åŒæœŸç”¨ãƒ•ã‚§ãƒ³ã‚¹ç”Ÿæˆ.
   CreateFrameFences();
 
-  // ƒRƒ}ƒ“ƒhƒŠƒXƒg‚Ì¶¬.
+  // ã‚³ãƒãƒ³ãƒ‰ãƒªã‚¹ãƒˆã®ç”Ÿæˆ.
   hr = m_device->CreateCommandList(
     0,
     D3D12_COMMAND_LIST_TYPE_DIRECT,
@@ -171,7 +171,7 @@ void D3D12AppBase::Render()
     nullptr
   );
 
-  // ƒXƒƒbƒvƒ`ƒFƒCƒ“•\¦‰Â”\‚©‚çƒŒƒ“ƒ_[ƒ^[ƒQƒbƒg•`‰æ‰Â”\‚Ö
+  // ã‚¹ãƒ¯ãƒƒãƒ—ãƒã‚§ã‚¤ãƒ³è¡¨ç¤ºå¯èƒ½ã‹ã‚‰ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¿ãƒ¼ã‚²ãƒƒãƒˆæç”»å¯èƒ½ã¸
   auto barrierToRT = CD3DX12_RESOURCE_BARRIER::Transition(
     m_renderTargets[m_frameIndex].Get(),
     D3D12_RESOURCE_STATE_PRESENT,
@@ -185,20 +185,20 @@ void D3D12AppBase::Render()
     m_heapDsv->GetCPUDescriptorHandleForHeapStart()
   );
 
-  // ƒJƒ‰[ƒoƒbƒtƒ@(ƒŒƒ“ƒ_[ƒ^[ƒQƒbƒgƒrƒ…[)‚ÌƒNƒŠƒA
-  const float clearColor[] = { 0.1f,0.25f,0.5f,0.0f }; // ƒNƒŠƒAF
+  // ã‚«ãƒ©ãƒ¼ãƒãƒƒãƒ•ã‚¡(ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãƒ“ãƒ¥ãƒ¼)ã®ã‚¯ãƒªã‚¢
+  const float clearColor[] = { 0.1f,0.25f,0.5f,0.0f }; // ã‚¯ãƒªã‚¢è‰²
   m_commandList->ClearRenderTargetView(rtv, clearColor, 0, nullptr);
   
-  // ƒfƒvƒXƒoƒbƒtƒ@(ƒfƒvƒXƒXƒeƒ“ƒVƒ‹ƒrƒ…[)‚ÌƒNƒŠƒA
+  // ãƒ‡ãƒ—ã‚¹ãƒãƒƒãƒ•ã‚¡(ãƒ‡ãƒ—ã‚¹ã‚¹ãƒ†ãƒ³ã‚·ãƒ«ãƒ“ãƒ¥ãƒ¼)ã®ã‚¯ãƒªã‚¢
   m_commandList->ClearDepthStencilView(
     dsv, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
 
-  // •`‰ææ‚ğƒZƒbƒg
+  // æç”»å…ˆã‚’ã‚»ãƒƒãƒˆ
   m_commandList->OMSetRenderTargets(1, &rtv, FALSE, &dsv);
 
   MakeCommand(m_commandList);
 
-  // ƒŒƒ“ƒ_[ƒ^[ƒQƒbƒg‚©‚çƒXƒƒbƒvƒ`ƒFƒCƒ“•\¦‰Â”\‚Ö
+  // ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‹ã‚‰ã‚¹ãƒ¯ãƒƒãƒ—ãƒã‚§ã‚¤ãƒ³è¡¨ç¤ºå¯èƒ½ã¸
   auto barrierToPresent = CD3DX12_RESOURCE_BARRIER::Transition(
     m_renderTargets[m_frameIndex].Get(),
     D3D12_RESOURCE_STATE_RENDER_TARGET,
@@ -218,7 +218,7 @@ void D3D12AppBase::Render()
 
 void D3D12AppBase::PrepareDescriptorHeaps()
 {
-  // RTV ‚ÌƒfƒBƒXƒNƒŠƒvƒ^ƒq[ƒv
+  // RTV ã®ãƒ‡ã‚£ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ’ãƒ¼ãƒ—
   HRESULT hr;
   D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc{
     D3D12_DESCRIPTOR_HEAP_TYPE_RTV,
@@ -233,7 +233,7 @@ void D3D12AppBase::PrepareDescriptorHeaps()
   }
   m_rtvDescriptorSize = m_device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 
-  // DSV ‚ÌƒfƒBƒXƒNƒŠƒvƒ^ƒq[ƒv
+  // DSV ã®ãƒ‡ã‚£ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ’ãƒ¼ãƒ—
   D3D12_DESCRIPTOR_HEAP_DESC dsvHeapDesc{
     D3D12_DESCRIPTOR_HEAP_TYPE_DSV,
     1,
@@ -249,21 +249,21 @@ void D3D12AppBase::PrepareDescriptorHeaps()
 
 void D3D12AppBase::PrepareRenderTargetView()
 {
-  // ƒXƒƒbƒvƒ`ƒFƒCƒ“ƒCƒ[ƒW‚Ö‚ÌƒŒƒ“ƒ_[ƒ^[ƒQƒbƒgƒrƒ…[¶¬
+  // ã‚¹ãƒ¯ãƒƒãƒ—ãƒã‚§ã‚¤ãƒ³ã‚¤ãƒ¡ãƒ¼ã‚¸ã¸ã®ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãƒ“ãƒ¥ãƒ¼ç”Ÿæˆ
   CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(
     m_heapRtv->GetCPUDescriptorHandleForHeapStart());
   for (UINT i = 0; i < FrameBufferCount; ++i)
   {
     m_swapchain->GetBuffer(i, IID_PPV_ARGS(&m_renderTargets[i]));
     m_device->CreateRenderTargetView(m_renderTargets[i].Get(), nullptr, rtvHandle);
-    // QÆ‚·‚éƒfƒBƒXƒNƒŠƒvƒ^‚Ì•ÏX
+    // å‚ç…§ã™ã‚‹ãƒ‡ã‚£ã‚¹ã‚¯ãƒªãƒ—ã‚¿ã®å¤‰æ›´
     rtvHandle.Offset(1, m_rtvDescriptorSize);
   }
 }
 
 void D3D12AppBase::CreateDepthBuffer(int width, int height)
 {
-  // ƒfƒvƒXƒoƒbƒtƒ@‚Ì¶¬
+  // ãƒ‡ãƒ—ã‚¹ãƒãƒƒãƒ•ã‚¡ã®ç”Ÿæˆ
   auto depthBufferDesc = CD3DX12_RESOURCE_DESC::Tex2D(
     DXGI_FORMAT_D32_FLOAT,
     width,
@@ -291,7 +291,7 @@ void D3D12AppBase::CreateDepthBuffer(int width, int height)
     throw std::runtime_error("Failed CreateCommittedResource(DepthBuffer)");
   }
 
-  // ƒfƒvƒXƒXƒeƒ“ƒVƒ‹ƒrƒ…[¶¬
+  // ãƒ‡ãƒ—ã‚¹ã‚¹ãƒ†ãƒ³ã‚·ãƒ«ãƒ“ãƒ¥ãƒ¼ç”Ÿæˆ
   D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc
   {
     DXGI_FORMAT_D32_FLOAT,  // Format
@@ -329,7 +329,7 @@ void D3D12AppBase::CreateFrameFences()
   for (UINT i = 0; i < FrameBufferCount; ++i)
   {
     hr = m_device->CreateFence(
-      0,  // ‰Šú’l
+      0,  // åˆæœŸå€¤
       D3D12_FENCE_FLAG_NONE, 
       IID_PPV_ARGS(&m_frameFences[i]));
     if (FAILED(hr))
@@ -341,19 +341,19 @@ void D3D12AppBase::CreateFrameFences()
 
 void D3D12AppBase::WaitPreviousFrame()
 {
-  // Œ»İ‚ÌƒtƒFƒ“ƒX‚É GPU ‚ª“’BŒãİ’è‚³‚ê‚é’l‚ğƒZƒbƒg.
+  // ç¾åœ¨ã®ãƒ•ã‚§ãƒ³ã‚¹ã« GPU ãŒåˆ°é”å¾Œè¨­å®šã•ã‚Œã‚‹å€¤ã‚’ã‚»ãƒƒãƒˆ.
   auto& fence = m_frameFences[m_frameIndex];
   const auto currentValue = ++m_frameFenceValues[m_frameIndex];
   m_commandQueue->Signal(fence.Get(), currentValue);
 
-  // Ÿˆ—‚·‚éƒRƒ}ƒ“ƒhiƒAƒƒP[ƒ^|j‚Ì‚à‚Ì‚ÍÀsŠ®—¹Ï‚İ‚©‚ğA
-  // ‘Î‚É‚È‚Á‚Ä‚¢‚éƒtƒFƒ“ƒX‚ÅŠm”F‚·‚é.
+  // æ¬¡å‡¦ç†ã™ã‚‹ã‚³ãƒãƒ³ãƒ‰ï¼ˆã‚¢ãƒ­ã‚±ãƒ¼ã‚¿ï¼ï¼‰ã®ã‚‚ã®ã¯å®Ÿè¡Œå®Œäº†æ¸ˆã¿ã‹ã‚’ã€
+  // å¯¾ã«ãªã£ã¦ã„ã‚‹ãƒ•ã‚§ãƒ³ã‚¹ã§ç¢ºèªã™ã‚‹.
   auto nextIndex = (m_frameIndex + 1) % FrameBufferCount;
   const auto finishExpected = m_frameFenceValues[nextIndex];
   const auto nextFenceValue = m_frameFences[nextIndex]->GetCompletedValue();
   if (nextFenceValue < finishExpected)
   {
-    // GPU ‚ªˆ—’†‚Ì‚½‚ßAƒCƒxƒ“ƒg‚Å‘Ò‹@‚·‚é
+    // GPU ãŒå‡¦ç†ä¸­ã®ãŸã‚ã€ã‚¤ãƒ™ãƒ³ãƒˆã§å¾…æ©Ÿã™ã‚‹
     m_frameFences[nextIndex]->SetEventOnCompletion(finishExpected, m_fenceWaitEvent);
     WaitForSingleObject(m_fenceWaitEvent, GpuWaitTimeout);
   }
@@ -371,7 +371,7 @@ HRESULT D3D12AppBase::CompileShaderFromFile(
   srcData.resize(uint32_t(infile.seekg(0, infile.end).tellg()));
   infile.seekg(0, infile.beg).read(srcData.data(), srcData.size());
 
-  // DXC ‚É‚æ‚éƒRƒ“ƒpƒCƒ‹ˆ—
+  // DXC ã«ã‚ˆã‚‹ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«å‡¦ç†
   ComPtr<IDxcLibrary> library;
   ComPtr<IDxcCompiler> compiler;
   ComPtr<IDxcBlobEncoding> source;
@@ -385,7 +385,7 @@ HRESULT D3D12AppBase::CompileShaderFromFile(
 #if _DEBUG
     L"/Zi", L"/O0",
 #else
-    L"/O2" // ƒŠƒŠ[ƒXƒrƒ‹ƒh‚Å‚ÍÅ“K‰»
+    L"/O2" // ãƒªãƒªãƒ¼ã‚¹ãƒ“ãƒ«ãƒ‰ã§ã¯æœ€é©åŒ–
 #endif
   };
   compiler->Compile(source.Get(), filePath.wstring().c_str(),
