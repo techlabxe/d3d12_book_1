@@ -1,7 +1,12 @@
 ﻿#include "D3D12AppBase.h"
 #include <exception>
 #include <fstream>
+
+#if _MSC_VER > 1922
+#define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
+#endif
 #include <experimental/filesystem>
+
 
 // DirectX Shader Compiler 用(第7章で説明)
 #include <dxcapi.h>
@@ -363,6 +368,7 @@ HRESULT D3D12AppBase::CompileShaderFromFile(
   const std::wstring& fileName, const std::wstring& profile, ComPtr<ID3DBlob>& shaderBlob, ComPtr<ID3DBlob>& errorBlob)
 {
   using namespace std::experimental::filesystem;
+
   path filePath(fileName);
   std::ifstream infile(filePath);
   std::vector<char> srcData;
