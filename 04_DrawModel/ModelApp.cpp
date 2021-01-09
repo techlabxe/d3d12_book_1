@@ -223,10 +223,12 @@ ModelApp::ComPtr<ID3D12Resource1> ModelApp::CreateBuffer(UINT bufferSize, const 
 {
   HRESULT hr;
   ComPtr<ID3D12Resource1> buffer;
+  const auto heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
+  const auto resDesc = CD3DX12_RESOURCE_DESC::Buffer(bufferSize);
   hr = m_device->CreateCommittedResource(
-    &CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
+    &heapProps,
     D3D12_HEAP_FLAG_NONE,
-    &CD3DX12_RESOURCE_DESC::Buffer(bufferSize),
+    &resDesc,
     D3D12_RESOURCE_STATE_GENERIC_READ,
     nullptr,
     IID_PPV_ARGS(&buffer)
@@ -271,10 +273,12 @@ ModelApp::TextureObject ModelApp::CreateTextureFromMemory(const std::vector<char
 
   // ステージングバッファの準備
   const auto totalBytes = GetRequiredIntermediateSize(texture.Get(), 0, UINT(subresources.size()));
+  const auto heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
+  const auto resDesc = CD3DX12_RESOURCE_DESC::Buffer(totalBytes);
   m_device->CreateCommittedResource(
-    &CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
+    &heapProps,
     D3D12_HEAP_FLAG_NONE,
-    &CD3DX12_RESOURCE_DESC::Buffer(totalBytes),
+    &resDesc,
     D3D12_RESOURCE_STATE_GENERIC_READ,
     nullptr,
     IID_PPV_ARGS(&staging)

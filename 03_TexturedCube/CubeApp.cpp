@@ -273,10 +273,12 @@ CubeApp::ComPtr<ID3D12Resource1> CubeApp::CreateBuffer(UINT bufferSize, const vo
 {
   HRESULT hr;
   ComPtr<ID3D12Resource1> buffer;
+  const auto heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
+  const auto resDesc = CD3DX12_RESOURCE_DESC::Buffer(bufferSize);
   hr = m_device->CreateCommittedResource(
-    &CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
+    &heapProps,
     D3D12_HEAP_FLAG_NONE,
-    &CD3DX12_RESOURCE_DESC::Buffer(bufferSize),
+    &resDesc,
     D3D12_RESOURCE_STATE_GENERIC_READ,
     nullptr,
     IID_PPV_ARGS(&buffer)
@@ -314,8 +316,9 @@ CubeApp::ComPtr<ID3D12Resource1> CubeApp::CreateTexture(const std::string& fileN
   );
 
   // テクスチャ生成
+  const auto heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
   m_device->CreateCommittedResource(
-    &CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+    &heapProps,
     D3D12_HEAP_FLAG_NONE,
     &texDesc,
     D3D12_RESOURCE_STATE_COPY_DEST,
@@ -328,7 +331,7 @@ CubeApp::ComPtr<ID3D12Resource1> CubeApp::CreateTexture(const std::string& fileN
   UINT numRows;
   UINT64 rowSizeBytes, totalBytes;
   m_device->GetCopyableFootprints(&texDesc, 0, 1, 0, &layouts, &numRows, &rowSizeBytes, &totalBytes);
-  ComPtr<ID3D12Resource1> stagingBuffer = CreateBuffer(totalBytes, nullptr);
+  ComPtr<ID3D12Resource1> stagingBuffer = CreateBuffer(UINT(totalBytes), nullptr);
 
   // ステージングバッファに画像をコピー
   {

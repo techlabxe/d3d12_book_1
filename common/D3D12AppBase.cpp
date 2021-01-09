@@ -283,8 +283,9 @@ void D3D12AppBase::CreateDepthBuffer(int width, int height)
   depthClearValue.DepthStencil.Stencil = 0;
 
   HRESULT hr;
+  const auto heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
   hr = m_device->CreateCommittedResource(
-    &CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+    &heapProps,
     D3D12_HEAP_FLAG_NONE,
     &depthBufferDesc,
     D3D12_RESOURCE_STATE_DEPTH_WRITE,

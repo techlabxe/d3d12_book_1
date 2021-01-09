@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "../common/D3D12AppBase.h"
+#include <algorithm>
 #include <DirectXMath.h>
 #include <GLTFSDK/GLTF.h>
 
